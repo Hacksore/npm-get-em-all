@@ -4,12 +4,17 @@
   "description": "get all the packages of npm",
   "type": "module",
   "scripts": {
-    "start": "tsx src/lib/script.ts"
+    "start": "tsx src/lib/script.ts",
+    "format": "biome format --write"
   },
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
-    "@types/node": "20",
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^20.17.24",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "commander": "^13.1.0"
   }
 }

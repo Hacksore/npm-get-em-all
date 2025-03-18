@@ -1,5 +1,13 @@
-import { getAllPackageNames } from "./index.js"
+import { Command } from "commander";
+import { getAllPackageNames } from "./get-all-package-names.js";
 
-getAllPackageNames();
+const program = new Command();
+program.name("getem");
 
-export { }
+// create all-packages command
+program
+  .command("all-packages")
+  .description("Get all package names")
+  .action(getAllPackageNames);
+
+export {};
