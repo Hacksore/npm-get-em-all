@@ -7,6 +7,7 @@ program.name("getem");
 // create all-packages command
 program
   .command("all-packages")
+  .option("-l, --limit", "The amount of items to fetch", "500")
   .description("Get all package names")
   .action(getAllPackageNames);
 

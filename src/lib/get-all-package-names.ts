@@ -1,12 +1,14 @@
 import { REPLICATE_URL } from "./const.js";
 import fs from "node:fs";
 
-export const getAllPackageNames = async (): Promise<void> => {
-  console.log("Fetching all package names from npm registry...");
+export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<void> => {
+  const packageLimit = Number(limit);
+
+  console.log(`Fetching all package names from npm registry (limit ${packageLimit})`);
   let lastSequence = 0; // Start from the beginning
 
   async function getChanges(since: number) {
-    const url = `${REPLICATE_URL}?since=${since}&limit=10000`; // Adjust limit as needed
+    const url = `${REPLICATE_URL}?since=${since}&limit=${packageLimit}`; // Adjust limit as needed
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
