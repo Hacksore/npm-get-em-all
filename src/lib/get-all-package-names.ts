@@ -15,10 +15,12 @@ export const getAllPackageNames = async ({
   let lastSequence = 0; // Start from the beginning
   let lastFetchTime = 0;
 
+  // TODO: give this a typescript type
   async function getChanges() {
     const url = `${REPLICATE_URL}?since=${whenToStart}&limit=${packageLimit}`; // Adjust limit as needed
     const response = await fetch(url);
     if (!response.ok) {
+      console.error(`Error fetching data: ${response.statusText}`);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -26,7 +28,7 @@ export const getAllPackageNames = async ({
     return data;
   }
 
-  const output = [];
+  const allPackages = [];
   while (true) {
     lastFetchTime = Date.now();
     const changes = await getChanges();
@@ -36,24 +38,23 @@ export const getAllPackageNames = async ({
     }
 
     for (const change of changes.results) {
-      // Process each change
-      // console.log(`Processing change for package: ${change.id}, seq: ${change.seq}`);
-      // Implement logic to add, update, or delete packages in your local storage
-      // based on the change.
-      output.push(change);
+      allPackages.push(change);
 
-      lastSequence = change.seq; // Update the last sequence number
+      lastSequence = change.seq;
     }
 
-    // Store the lastSequence number persistently (e.g., in a file or database)
-    const timeInSeconds = Math.floor((Date.now() - lastFetchTime) / 1000);
+    const timeInMillisecondsOrSeconds = () => { 
+      const timeInSeconds = (Date.now() - lastFetchTime) / 1000;
+      return timeInSeconds > 1 ? timeInSeconds : (timeInSeconds * 1000).toFixed(2);
+    }
+
     console.log(
-      `seq: ${lastSequence}, total packages: ${output.length}, time: ${timeInSeconds} seconds`,
+      `seq: ${lastSequence}, total packages: ${allPackages.length}, time: ${timeInMillisecondsOrSeconds()} seconds`,
     );
 
-    // Add a delay to avoid overwhelming the API
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
+    // TODO: investigate what the rate limit is and if we can speed this up at all?
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  fs.writeFileSync("output.json", JSON.stringify(output, null, 2), "utf8");
+  fs.writeFileSync("output.json", JSON.stringify(allPackages, null, 2), "utf8");
 };
