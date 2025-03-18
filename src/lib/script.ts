@@ -10,4 +10,4 @@ program
   .description("Get all package names")
   .action(getAllPackageNames);
 
-export {};
+program.parse(process.argv);
