@@ -1,16 +1,24 @@
 import { REPLICATE_URL } from "./const.js";
 import fs from "node:fs";
 
+export interface GetAllPackageOptions {
+  limit: number;
+  since: number;
+  debug: boolean;
+}
+
 export const getAllPackageNames = async ({
   limit,
   since,
-}: { limit: number; since: number }): Promise<void> => {
+  debug,
+}: GetAllPackageOptions): Promise<void> => {
   const packageLimit = Number(limit);
   const whenToStart = Number(since);
 
   console.log(
     `Fetching all package names from npm registry (limit ${packageLimit})`,
   );
+  console.log(`Starting from ${since})`);
 
   let lastSequence = 0;
   let lastFetchTime = 0;
@@ -25,6 +33,10 @@ export const getAllPackageNames = async ({
     }
 
     const data = await response.json();
+    if (debug) {
+      console.log(data);
+    }
+
     return data;
   }
 
