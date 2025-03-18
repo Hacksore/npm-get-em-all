@@ -15,7 +15,6 @@ export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<
     }
 
     const data = await response.json();
-    console.log(`Fetched ${data.results.length} changes`);
     return data;
   }
 
@@ -38,7 +37,7 @@ export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<
     }
 
     // Store the lastSequence number persistently (e.g., in a file or database)
-    console.log(`Last sequence processed: ${lastSequence}`);
+    console.log(`Last sequence processed: ${lastSequence}, total packages: ${output.length}`);
 
     // Add a delay to avoid overwhelming the API
     await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
