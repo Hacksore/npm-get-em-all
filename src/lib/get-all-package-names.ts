@@ -43,10 +43,12 @@ export const getAllPackageNames = async ({
       lastSequence = change.seq;
     }
 
-    const timeInMillisecondsOrSeconds = () => { 
+    const timeInMillisecondsOrSeconds = () => {
       const timeInSeconds = (Date.now() - lastFetchTime) / 1000;
-      return timeInSeconds > 1 ? timeInSeconds : (timeInSeconds * 1000).toFixed(2);
-    }
+      return timeInSeconds > 1
+        ? timeInSeconds
+        : (timeInSeconds * 1000).toFixed(2);
+    };
 
     console.log(
       `seq: ${lastSequence}, total packages: ${allPackages.length}, time: ${timeInMillisecondsOrSeconds()} seconds`,
