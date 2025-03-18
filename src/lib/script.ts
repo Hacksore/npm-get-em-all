@@ -8,6 +8,7 @@ program.name("getem");
 program
   .command("all-packages")
   .option("-l, --limit", "The amount of items to fetch", "500")
+  .option("-s, --since", "When to start from", "0")
   .description("Get all package names")
   .action(getAllPackageNames);
 

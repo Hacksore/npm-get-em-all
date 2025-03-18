@@ -1,14 +1,22 @@
 import { REPLICATE_URL } from "./const.js";
 import fs from "node:fs";
 
-export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<void> => {
+export const getAllPackageNames = async ({
+  limit,
+  since,
+}: { limit: number; since: number }): Promise<void> => {
   const packageLimit = Number(limit);
+  const whenToStart = Number(since);
 
-  console.log(`Fetching all package names from npm registry (limit ${packageLimit})`);
+  console.log(
+    `Fetching all package names from npm registry (limit ${packageLimit})`,
+  );
+
   let lastSequence = 0; // Start from the beginning
+  let lastFetchTime = 0;
 
-  async function getChanges(since: number) {
-    const url = `${REPLICATE_URL}?since=${since}&limit=${packageLimit}`; // Adjust limit as needed
+  async function getChanges() {
+    const url = `${REPLICATE_URL}?since=${whenToStart}&limit=${packageLimit}`; // Adjust limit as needed
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -20,7 +28,8 @@ export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<
 
   const output = [];
   while (true) {
-    const changes = await getChanges(lastSequence);
+    lastFetchTime = Date.now();
+    const changes = await getChanges();
     if (!changes || !changes.results) {
       console.log("No more changes or error occurred.");
       break;
@@ -37,7 +46,10 @@ export const getAllPackageNames = async ({ limit }: { limit: number }): Promise<
     }
 
     // Store the lastSequence number persistently (e.g., in a file or database)
-    console.log(`Last sequence processed: ${lastSequence}, total packages: ${output.length}`);
+    const timeInSeconds = Math.floor((Date.now() - lastFetchTime) / 1000);
+    console.log(
+      `seq: ${lastSequence}, total packages: ${output.length}, time: ${timeInSeconds} seconds`,
+    );
 
     // Add a delay to avoid overwhelming the API
     await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
