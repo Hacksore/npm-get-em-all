@@ -12,12 +12,12 @@ export const getAllPackageNames = async ({
     `Fetching all package names from npm registry (limit ${packageLimit})`,
   );
 
-  let lastSequence = 0; // Start from the beginning
+  let lastSequence = 0;
   let lastFetchTime = 0;
 
   // TODO: give this a typescript type
   async function getChanges() {
-    const url = `${REPLICATE_URL}?since=${whenToStart}&limit=${packageLimit}`; // Adjust limit as needed
+    const url = `${REPLICATE_URL}?since=${whenToStart}&limit=${packageLimit}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Error fetching data: ${response.statusText}`);
