@@ -34,7 +34,7 @@ export const getAllPackageNames = async ({
 
     const data = await response.json();
     if (debug) {
-      console.log(data);
+      console.log(JSON.stringify(data));
     }
 
     return data;
