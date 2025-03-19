@@ -25,7 +25,7 @@ export const getAllPackageNames = async ({
 
   // TODO: give this a typescript type
   async function getChanges() {
-    const url = `${REPLICATE_URL}?since=${whenToStart}&limit=${packageLimit}`;
+    const url = `${REPLICATE_URL}?since=${whenToStart}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Error fetching data: ${response.statusText}`);
@@ -67,7 +67,7 @@ export const getAllPackageNames = async ({
     );
 
     // TODO: investigate what the rate limit is and if we can speed this up at all?
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1_000));
   }
 
   fs.writeFileSync("output.json", JSON.stringify(allPackages, null, 2), "utf8");

@@ -15,6 +15,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "all-package-names": "^2.0.897",
     "commander": "^13.1.0"
   }
 }
